@@ -88,7 +88,7 @@ def transcribe(
 
     # model = whisper.load_model(model_str)
 
-    pipe = pipeline("automatic-speech-recognition", model=model_str)
+    pipe = pipeline("automatic-speech-recognition", model=model_str, chunk_length_s=30)
 
     def transcribe(audio):
         text = pipe(audio, generate_kwargs={"task": "transcribe", "language": "ar"})[
