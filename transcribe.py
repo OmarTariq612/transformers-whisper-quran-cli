@@ -114,7 +114,7 @@ def transcribe(
             time_end = time.perf_counter()
             processing_time = time_end - time_start
             benchmark_data.append(BenchmarkEntry(duration, processing_time))
-            prediction_text = araby.strip_diacritics(result["text"].strip())
+            prediction_text = araby.strip_diacritics(result.strip())
             if log_level == "verbose":
                 print(prediction_text)
             wer: float = wer_module.compute(predictions=[prediction_text], references=[ayah_ref_text])  # type: ignore
