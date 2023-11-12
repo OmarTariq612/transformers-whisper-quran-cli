@@ -153,6 +153,7 @@ def transcribe(
     with open(
         path_join(output_dir_path, f"{out_prefix}_per_ayah.csv"),
         "w",
+        encoding="utf-8",
     ) as per_ayah_file:
         per_ayah_file.write("sorah,ayah,wer,num_words_reference,pred_text\n")
         for entry in per_ayah:  # type: ignore
