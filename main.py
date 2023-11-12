@@ -1,6 +1,5 @@
 import click
 from clicktypes import SORAH_RANGE
-from transcribe import transcribe
 from merge import merge as m
 
 
@@ -22,7 +21,9 @@ def main():
     help="multilingual model used for transcribing",
 )
 @click.option("--chunk-length", default=10, type=int, help="chunk length in secs")
-@click.option("--stride-length", type=(int, int), default=(4, 2), help="stride length")
+@click.option(
+    "--stride-length", type=(int, int), default=(4, 2), help="stride length in secs"
+)
 @click.option("--sorah-range", default="1:114", type=SORAH_RANGE)
 @click.option(
     "--out-prefix",
@@ -52,16 +53,22 @@ def generate(
     text_csv_path: str,
     audio_path: str,
     model: str,
+    chunk_length: int,
+    stride_length: tuple[int, int],
     sorah_range: tuple[int, int],
     out_prefix: str,
     log_level: str,
     o: str,
     bench: bool,
 ):
+    from transcribe import transcribe
+
     transcribe(
         audio_path=audio_path,
         text_csv_path=text_csv_path,
         model_str=model,
+        chunk_length=chunk_length,
+        stride_length=stride_length,
         from_sorah=sorah_range[0],
         to_sorah=sorah_range[1],
         output_dir=o,

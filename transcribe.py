@@ -54,6 +54,8 @@ def transcribe(
     audio_path: str,
     text_csv_path: str,
     model_str: str = "openai/whisper-small",
+    chunk_length: int = 10,
+    stride_length: tuple[int, int] = (4, 2),
     from_sorah: int = 1,
     to_sorah: int = 114,
     output_dir: str = ".",
@@ -92,8 +94,8 @@ def transcribe(
         text = pipe(
             audio,
             generate_kwargs={"task": "transcribe", "language": "ar"},
-            chunk_length_s=10,
-            stride_length_s=(4, 2),
+            chunk_length_s=chunk_length,
+            stride_length_s=stride_length,
         )["text"]
         return text
 
@@ -137,14 +139,14 @@ def transcribe(
         "w",
     ) as per_ayah_file:
         per_ayah_file.write("sorah,ayah,wer,num_words_reference\n")
-        for entry in per_ayah:
+        for entry in per_ayah:  # type: ignore
             per_ayah_file.write(f"{entry}\n")
 
     with open(
         path_join(output_dir_path, f"{out_prefix}_per_sorah.csv"), "w"
     ) as per_sorah_file:
         per_sorah_file.write("sorah,wer,num_words_reference\n")
-        for entry in per_sorah:
+        for entry in per_sorah:  # type: ignore
             per_sorah_file.write(f"{entry}\n")
 
     total_num = 0
