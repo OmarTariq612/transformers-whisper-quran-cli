@@ -27,9 +27,10 @@ class PerAyahEntry:
     ayah: int
     wer: float
     num_words_reference: int
+    ayah_text: str
 
     def __str__(self) -> str:
-        return f"{self.sorah},{self.ayah},{self.wer:.4f},{self.num_words_reference}"
+        return f"{self.sorah},{self.ayah},{self.wer:.4f},{self.num_words_reference},{self.ayah_text}"
 
 
 @dataclass
@@ -131,7 +132,13 @@ def transcribe(
                 print(prediction_text)
             wer: float = wer_module.compute(predictions=[prediction_text], references=[ayah_ref_text])  # type: ignore
             per_ayah.append(
-                PerAyahEntry(sorah_num, ayah_num, wer, len(ayah_ref_text.split()))
+                PerAyahEntry(
+                    sorah_num,
+                    ayah_num,
+                    wer,
+                    len(ayah_ref_text.split()),
+                    prediction_text,
+                )
             )
 
         total_num = 0
@@ -147,7 +154,7 @@ def transcribe(
         path_join(output_dir_path, f"{out_prefix}_per_ayah.csv"),
         "w",
     ) as per_ayah_file:
-        per_ayah_file.write("sorah,ayah,wer,num_words_reference\n")
+        per_ayah_file.write("sorah,ayah,wer,num_words_reference,pred_text\n")
         for entry in per_ayah:  # type: ignore
             per_ayah_file.write(f"{entry}\n")
 
