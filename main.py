@@ -24,6 +24,11 @@ def main():
 @click.option(
     "--stride-length", type=(int, int), default=(4, 2), help="stride length in secs"
 )
+@click.option(
+    "--device",
+    type=str,
+    default="cpu",
+)
 @click.option("--sorah-range", default="1:114", type=SORAH_RANGE)
 @click.option(
     "--out-prefix",
@@ -55,6 +60,7 @@ def generate(
     model: str,
     chunk_length: int,
     stride_length: tuple[int, int],
+    device: str,
     sorah_range: tuple[int, int],
     out_prefix: str,
     log_level: str,
@@ -69,6 +75,7 @@ def generate(
         model_str=model,
         chunk_length=chunk_length,
         stride_length=stride_length,
+        device=device,
         from_sorah=sorah_range[0],
         to_sorah=sorah_range[1],
         output_dir=o,

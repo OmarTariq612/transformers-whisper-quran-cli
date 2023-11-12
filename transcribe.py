@@ -56,6 +56,7 @@ def transcribe(
     model_str: str = "openai/whisper-small",
     chunk_length: int = 10,
     stride_length: tuple[int, int] = (4, 2),
+    device: str = "cpu",
     from_sorah: int = 1,
     to_sorah: int = 114,
     output_dir: str = ".",
@@ -88,7 +89,12 @@ def transcribe(
         ).is_file():
             raise ValueError(f"the given audio path doesn't have sorah({sorah_num})")
 
-    pipe = pipeline("automatic-speech-recognition", model=model_str, chunk_length_s=30)
+    pipe = pipeline(
+        "automatic-speech-recognition",
+        model=model_str,
+        chunk_length_s=30,
+        device=device,
+    )
 
     def transcribe(audio):
         text = pipe(
