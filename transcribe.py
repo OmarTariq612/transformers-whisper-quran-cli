@@ -110,13 +110,16 @@ def transcribe(
                 audio_dir_path,
                 sorah_ayah_format(sorah_num=sorah_num, ayah_num=ayah_num),
             )
-            duration = MP3(audio_file_path).info.length
+            if do_benchmark:
+                duration = MP3(audio_file_path).info.length
             time_start = time.perf_counter()
             # result = model.transcribe(audio_file_path, language="ar")
             result = transcribe(audio_file_path)
             time_end = time.perf_counter()
             processing_time = time_end - time_start
-            benchmark_data.append(BenchmarkEntry(duration, processing_time))
+
+            if do_benchmark:
+                benchmark_data.append(BenchmarkEntry(duration, processing_time))
             prediction_text = araby.strip_diacritics(result.strip())
             if log_level == "verbose":
                 print(prediction_text)
