@@ -86,14 +86,15 @@ def transcribe(
         ).is_file():
             raise ValueError(f"the given audio path doesn't have sorah({sorah_num})")
 
-    # model = whisper.load_model(model_str)
-
     pipe = pipeline("automatic-speech-recognition", model=model_str, chunk_length_s=30)
 
     def transcribe(audio):
-        text = pipe(audio, generate_kwargs={"task": "transcribe", "language": "ar"})[
-            "text"
-        ]
+        text = pipe(
+            audio,
+            generate_kwargs={"task": "transcribe", "language": "ar"},
+            chunk_length_s=10,
+            stride_length_s=(4, 2),
+        )["text"]
         return text
 
     wer_module = evaluate.load("wer")

@@ -21,6 +21,8 @@ def main():
     type=str,
     help="multilingual model used for transcribing",
 )
+@click.option("--chunk-length", default=10, type=int, help="chunk length in secs")
+@click.option("--stride-length", type=(int, int), default=(4, 2), help="stride length")
 @click.option("--sorah-range", default="1:114", type=SORAH_RANGE)
 @click.option(
     "--out-prefix",
