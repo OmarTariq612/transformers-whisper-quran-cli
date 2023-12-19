@@ -82,7 +82,7 @@ def transcribe(
     for sorah_num in range(from_sorah, to_sorah + 1):
         for ayah_num in range(1, len(reference_texts[sorah_num]) + 1):
             index = per_ayah_index + ayah_num - 1
-            prediction_text = araby.strip_diacritics(outputs[index].strip())
+            prediction_text = araby.strip_diacritics(outputs[index]["text"].strip())
             if log_level == "verbose":
                 print(prediction_text)
 
