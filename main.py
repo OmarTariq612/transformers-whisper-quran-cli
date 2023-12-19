@@ -20,15 +20,7 @@ def main():
     type=str,
     help="multilingual model used for transcribing",
 )
-@click.option("--chunk-length", default=10, type=int, help="chunk length in secs")
-@click.option(
-    "--stride-length", type=(int, int), default=(4, 2), help="stride length in secs"
-)
-@click.option(
-    "--device",
-    type=str,
-    default="cpu",
-)
+@click.option("--device", type=str, default="cpu", help="device used to load the model")
 @click.option("--sorah-range", default="1:114", type=SORAH_RANGE)
 @click.option(
     "--out-prefix",
@@ -47,25 +39,22 @@ def main():
     help="output directory",
 )
 @click.option(
-    "--bench",
+    "--batch-size",
     "-b",
-    default=False,
-    is_flag=True,
-    type=click.BOOL,
-    help="export benchmark info to a file",
+    default=8,
+    type=click.INT,
+    help="batch size used for transcribing (default: 8)",
 )
 def generate(
     text_csv_path: str,
     audio_path: str,
     model: str,
-    chunk_length: int,
-    stride_length: tuple[int, int],
     device: str,
     sorah_range: tuple[int, int],
     out_prefix: str,
     log_level: str,
     o: str,
-    bench: bool,
+    batch_size: int,
 ):
     from transcribe import transcribe
 
@@ -73,31 +62,29 @@ def generate(
         audio_path=audio_path,
         text_csv_path=text_csv_path,
         model_str=model,
-        chunk_length=chunk_length,
-        stride_length=stride_length,
         device=device,
         from_sorah=sorah_range[0],
         to_sorah=sorah_range[1],
         output_dir=o,
         out_prefix=out_prefix,
         log_level=log_level,
-        do_benchmark=bench,
+        batch_size=batch_size,
     )
 
 
-@main.command(help="merge multiple csv files into one containing WER as a total")
-@click.argument(
-    "src",
-    type=click.Path(exists=True, dir_okay=False, readable=True),
-    nargs=-1,
-    required=True,
-)
-@click.option("--out-prefix", default="merged", type=click.STRING)
-@click.option(
-    "-o", default=".", type=click.Path(exists=True, file_okay=False, executable=True)
-)
-def merge(src: tuple[str, ...], out_prefix: str, o: str):
-    m(srcs=src, out_prefix=out_prefix, output_dir=o)
+# @main.command(help="merge multiple csv files into one containing WER as a total")
+# @click.argument(
+#     "src",
+#     type=click.Path(exists=True, dir_okay=False, readable=True),
+#     nargs=-1,
+#     required=True,
+# )
+# @click.option("--out-prefix", default="merged", type=click.STRING)
+# @click.option(
+#     "-o", default=".", type=click.Path(exists=True, file_okay=False, executable=True)
+# )
+# def merge(src: tuple[str, ...], out_prefix: str, o: str):
+#     m(srcs=src, out_prefix=out_prefix, output_dir=o)
 
 
 if __name__ == "__main__":
