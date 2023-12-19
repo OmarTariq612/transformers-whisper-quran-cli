@@ -129,7 +129,7 @@ def transcribe(
         path_join(output_dir_path, f"{out_prefix}_per_ayah.csv"), "w", encoding="utf-8"
     ) as per_ayah_file:
         per_ayah_file.write(
-            "sorah,ayah,duration,processing_time,pred_text,ref_text,insertions,deletions,hits,substitutions,wer\n"
+            "sorah,ayah,,pred_text,ref_text,insertions,deletions,hits,substitutions,wer,duration\n"
         )
         for entry in per_ayah:
             per_ayah_file.write(f"{entry}\n")
