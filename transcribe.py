@@ -8,7 +8,7 @@ from utils import path_join, sorah_ayah_format, merge_wer_info
 from entrytypes import PerAyahEntry, PerSorahEntry, TotalEntry, WERInfo
 from mutagen.mp3 import MP3
 from typing import Final
-from torch import cuda
+from torch import cuda, float16
 from jiwer import process_words
 
 
@@ -55,6 +55,7 @@ def transcribe(
         model=model_str,
         chunk_length_s=30,
         batch_size=batch_size,
+        torch_dtype=float16,
         device=device,
     )
     model.tokenizer.pad_token_id = model.model.config.eos_token_id
@@ -70,7 +71,6 @@ def transcribe(
         audio_paths,
         chunk_length_s=30,
         batch_size=batch_size,
-        device=DEVICE,
         generate_kwargs={"task": "transcribe", "language": "ar"},
     )
 
